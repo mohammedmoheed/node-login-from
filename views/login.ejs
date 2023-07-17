@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head') %>
+    <title>Register Page</title>
+  </head>
+  <body>
+    <%- include('../partials/nav') %>
+    <div class="container mt-4">
+      <h1>Login Page</h1>
+      <form action="/login" method="post">
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Email</label>
+          <input
+            type="email"
+            name="email"
+            class="form-control"
+            id="email"
+            value="<%=locals.email%>"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">password</label>
+          <input
+            type="password"
+            name="password"
+            class="form-control"
+            id="password"
+          />
+        </div>
+        <div class="mb3">
+          <h3 style="color: red"><%= locals.message %></h3>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </body>
+</html>
