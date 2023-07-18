@@ -3,6 +3,17 @@ import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import dotenv from "dotenv";
+import path from "path";
+
+const cwd = path.resolve();
+const fpath = cwd + "/data/config.env";
+//config path for environmet variable
+dotenv.config({
+  path: fpath,
+});
+
+console.log(fpath);
 
 const isAuthenticate = async (req, res, next) => {
   const { token } = req.cookies;
@@ -35,7 +46,7 @@ router.get("/user", isAuthenticate, (req, res) => {
 });
 
 mongoose
-  .connect("mongodb://127.0.0.1:27017/", {
+  .connect(process.env.MONGO_URI, {
     dbName: "backend",
   })
   .then(() => console.log("connected"))
@@ -69,7 +80,7 @@ router.post("/register", async (req, res, next) => {
   const hashPassword = await bcrypt.hash(password, 10);
   //create user
   user = await User.create({ name, email, password: hashPassword });
-  next();
+  res.redirect("/login");
 });
 
 router.post("/logout", (req, res) => {
@@ -96,6 +107,7 @@ router.post("/login", async (req, res) => {
   const token = jwt.sign({ _id: user._id }, "abcdef");
   res.cookie("token", token, {
     httpOnly: true,
+    expires: new Date(Date.now() + 60 * 1000),
   });
   res.redirect("/user");
 });
