@@ -18,7 +18,7 @@ console.log(fpath);
 const isAuthenticate = async (req, res, next) => {
   const { token } = req.cookies;
   if (token) {
-    const decode = jwt.verify(token, "abcdef");
+    const decode = jwt.verify(token, process.env.JWT_SECRET);
     req.user = await User.findById(decode._id);
     next();
   } else {
